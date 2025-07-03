@@ -4,6 +4,6 @@ namespace e_comerce.Infrastructure.Repositories;
 
 public interface IUserRepository
 {
-    Task<ApplicationUser> GetByEmailAndPassword(string email, string password);
-    Task<ApplicationUser> AddUser(ApplicationUser user);
+    public Task<ApplicationUser> GetByEmailAndPassword(string email, string password);
+    public Task<ApplicationUser> AddUser(ApplicationUser user);
 }
