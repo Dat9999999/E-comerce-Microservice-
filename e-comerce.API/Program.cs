@@ -4,7 +4,7 @@ using e_comerce.Web.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure();
-builder.Services.AddApplication();
+builder.Services.AddCore();
 builder.Services.AddControllers();
 
 var app = builder.Build();
