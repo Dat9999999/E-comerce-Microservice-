@@ -23,7 +23,7 @@ internal class UserService : IUserService
             return null;
         }
 
-        return _mapper.Map<ApplicationUser, AuthenticationResponse>(user) with
+        return _mapper.Map<AuthenticationResponse>(user) with
         {
             Success = true,
             Token = "token"
@@ -32,26 +32,16 @@ internal class UserService : IUserService
 
     public async Task<AuthenticationResponse> Register(RegisterRequest request)
     {
-        var user = _mapper.Map<RegisterRequest, ApplicationUser>(request);
-            
-        //     new ApplicationUser()
-        // {
-        //     Email = request.Email,
-        //     Gender = request.Gender.ToString(),
-        //     PersonName = request.PersonName,
-        //     Password = request.Password,
-        //     UserId = Guid.NewGuid()
-        // };
+        var user = _mapper.Map<ApplicationUser>(request);
         ApplicationUser? userAdded = await _userRepository.AddUser(user);
         if (userAdded is null)
         {
             return null;
         }
-        return new AuthenticationResponse(userAdded.UserId,
-                    userAdded.Email,
-                    userAdded.PersonName,
-                    userAdded.Gender, 
-                    "token",
-            true);
+        return _mapper.Map<AuthenticationResponse>(userAdded) with
+        {
+            Success = true,
+            Token = "token"
+        };
     }
 }

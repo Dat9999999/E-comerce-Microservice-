@@ -7,4 +7,9 @@ public record AuthenticationResponse(
     string? Gender,
     string? Token,
     bool Success
-    );
+)
+{
+    public AuthenticationResponse() : this(default, default, default, default, default, default)
+    {
+    }
+}

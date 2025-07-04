@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using e_comerce.Infrastructure;
@@ -15,7 +14,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // Enum -> string
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
-builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile));
+
+builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile).Assembly);
+
 
 
 var app = builder.Build();
