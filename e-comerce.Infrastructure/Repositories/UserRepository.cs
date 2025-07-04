@@ -9,6 +9,7 @@ public class UserRepository : IUserRepository
     {
         return new ApplicationUser()
         {
+            UserId = Guid.NewGuid(),
             Email = email,
             Password = password,
             PersonName = "PersonName test",
