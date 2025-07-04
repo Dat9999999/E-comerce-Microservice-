@@ -1,3 +1,4 @@
+using AutoMapper;
 using e_comerce.Infrastructure.DTO;
 using e_comerce.Infrastructure.Entities;
 using e_comerce.Infrastructure.Repositories;
@@ -8,9 +9,11 @@ namespace e_comerce.Infrastructure.Services;
 internal class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    public UserService(IUserRepository userRepository)
+    private readonly IMapper _mapper;
+    public UserService(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
     public async Task<AuthenticationResponse> Login(LoginRequest request)
     {
@@ -20,23 +23,25 @@ internal class UserService : IUserService
             return null;
         }
 
-        return new AuthenticationResponse(user.UserId,
-            user.Email,
-             user.PersonName,
-             user.Gender, "token",
-            true);
+        return _mapper.Map<ApplicationUser, AuthenticationResponse>(user) with
+        {
+            Success = true,
+            Token = "token"
+        };
     }
 
     public async Task<AuthenticationResponse> Register(RegisterRequest request)
     {
-        var user = new ApplicationUser()
-        {
-            Email = request.Email,
-            Gender = request.Gender.ToString(),
-            PersonName = request.PersonName,
-            Password = request.Password,
-            UserId = Guid.NewGuid()
-        };
+        var user = _mapper.Map<RegisterRequest, ApplicationUser>(request);
+            
+        //     new ApplicationUser()
+        // {
+        //     Email = request.Email,
+        //     Gender = request.Gender.ToString(),
+        //     PersonName = request.PersonName,
+        //     Password = request.Password,
+        //     UserId = Guid.NewGuid()
+        // };
         ApplicationUser? userAdded = await _userRepository.AddUser(user);
         if (userAdded is null)
         {
